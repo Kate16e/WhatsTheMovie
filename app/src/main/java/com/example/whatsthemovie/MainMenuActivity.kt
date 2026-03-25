@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
+import com.example.whatsthemovie.ui.GameMode
 
 class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,19 +15,22 @@ class MainMenuActivity : AppCompatActivity() {
         val btnQuote = findViewById<Button>(R.id.btnQuote)
         val btnMusic = findViewById<Button>(R.id.btnMusic)
 
-        // Запуск игры (рабочая кнопка)
+        //Запуск игры
         btnFrame.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            startGame(GameMode.FRAME)
         }
 
-        // Пока ничего не делают
         btnQuote.setOnClickListener {
-            // Заглушка
+            startGame(GameMode.QUOTE)
         }
 
         btnMusic.setOnClickListener {
-            // Заглушка
+            startGame(GameMode.MUSIC)
         }
+    }
+    private fun startGame(mode: GameMode) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("GAME_MODE", mode)
+        startActivity(intent)
     }
 }

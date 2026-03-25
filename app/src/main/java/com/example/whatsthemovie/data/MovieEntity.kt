@@ -9,4 +9,6 @@ data class MovieEntity(
     val id: Int = 0,
     val imageId: Int, //id изображения
     val name: String, //название фильма
+    val quote: String,    //цитата
+    val musicId: Int   //музыка
 )

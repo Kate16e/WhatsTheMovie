@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.whatsthemovie.data.MovieEntity
 import com.example.whatsthemovie.data.MovieRepository
+import com.example.whatsthemovie.ui.GameMode
 import kotlinx.coroutines.launch
 
-class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
+class MovieViewModel(private val repository: MovieRepository, private val mode: GameMode) : ViewModel() {
 
+    private val _currentMode = MutableLiveData<GameMode>()
+    val currentMode: LiveData<GameMode> = _currentMode
     private val _currentMovie = MutableLiveData<MovieEntity?>()
     val currentMovie: LiveData<MovieEntity?> = _currentMovie
 
@@ -31,6 +34,7 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     val navigateToResult: LiveData<Int> = _navigateToResult
 
     init {
+        _currentMode.value = mode
         loadNewMovie()
     }
 
@@ -79,5 +83,8 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         answeredMovies.clear()
         _score.value = 0
         loadNewMovie()
+    }
+    fun exitGame() {
+        _navigateToResult.postValue(_score.value ?: 0)  //показываем результат с текущим счётом
     }
 }

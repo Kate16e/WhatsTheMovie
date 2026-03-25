@@ -12,13 +12,55 @@
         android:id="@+id/tvScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="100dp"
         android:text="Счет: 0"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvQuote"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="44dp"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="Цитата из фильма"
+        android:textColor="@android:color/black"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvScore" />
+
+    <Button
+        android:id="@+id/btnPlayMusic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="44dp"
+        android:text="▶ Слушать музыку"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvScore" />
+
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="24dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="Закрыть"
+        android:padding="12dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvScore"
+        app:tint="@android:color/black" />
 
     <ImageView
         android:id="@+id/ivMovieFrame"
@@ -35,31 +77,34 @@
 
     <Button
         android:id="@+id/btnOption1"
+        android:textSize="11sp"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="420dp"
         android:layout_marginEnd="8dp"
         android:text="Вариант 1"
         app:layout_constraintEnd_toStartOf="@+id/btnOption2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMovieFrame" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnOption2"
+        android:textSize="11sp"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="420dp"
         android:text="Вариант 2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnOption1"
-        app:layout_constraintTop_toBottomOf="@+id/ivMovieFrame" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnOption3"
+        android:textSize="11sp"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:text="Вариант 3"
         app:layout_constraintEnd_toStartOf="@+id/btnOption4"
@@ -68,10 +113,11 @@
 
     <Button
         android:id="@+id/btnOption4"
+        android:textSize="11sp"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="70dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
         android:text="Вариант 4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnOption3"
@@ -82,8 +128,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Следующий вопрос"
         android:enabled="false"
+        android:text="Следующий вопрос"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

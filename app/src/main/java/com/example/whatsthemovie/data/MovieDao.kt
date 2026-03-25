@@ -3,7 +3,7 @@ package com.example.whatsthemovie.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.*
+
 @Dao
 interface MovieDao {
     @Query("SELECT * FROM movies")
