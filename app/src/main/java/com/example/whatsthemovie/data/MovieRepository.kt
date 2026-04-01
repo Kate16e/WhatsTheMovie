@@ -201,9 +201,49 @@ class MovieRepository(private val movieDao: MovieDao) {
                 quote = "— Народ, этого просто не может быть! Может, мы все... в коме?\n" +
                         "— Сдурела?! В кому вместе не впадают!",
                 musicId = R.raw.jumanji
-            )
-
-
+            ) ,
+            MovieEntity(
+                imageId = R.drawable.legenda,
+                name = "Легенда",
+                quote = "Если живешь в стеклянном доме, то не бросай в нём камни!",
+                musicId = R.raw.legenda
+            ),
+            MovieEntity(
+                imageId = R.drawable.boitsovskiyklub,
+                name = "Бойцовский клуб",
+                quote = "Лишь утратив всё до конца, мы обретаем свободу",
+                musicId = R.raw.boitsovskiyklub
+            ),
+            MovieEntity(
+                imageId = R.drawable.duna,
+                name = "Дюна",
+                quote = "Скажи, что ты презираешь? Твоя истинная суть определяется именно этим",
+                musicId = R.raw.duna
+            ),
+            MovieEntity(
+                imageId = R.drawable.hronikiharnii,
+                name = "Хроники Нарнии",
+                quote = "Король должен блюсти закон, потому что только закон и делает его королём",
+                musicId = R.raw.hronikinarnii
+            ),
+            MovieEntity(
+                imageId = R.drawable.ono,
+                name = "Оно",
+                quote = "Я Пеннивайз — Танцующий Клоун",
+                musicId = R.raw.ono
+            ),
+            MovieEntity(
+                imageId = R.drawable.patiyelement,
+                name = "Пятый элемент",
+                quote = "Любовь — это пятый элемент. Она способна спасти всё",
+                musicId = R.raw.patiyelement
+            ),
+            MovieEntity(
+                imageId = R.drawable.volksuolstreet,
+                name = "Волк с уолл-стрит",
+                quote = "Деньги — это самый мощный способ разрешения проблем из известных человеку, и каждый, кто попробует разубедить вас в этом, — просто мешок с дерьмом",
+                musicId = R.raw.volksoulsreet
+            ),
         )
     }
 }
