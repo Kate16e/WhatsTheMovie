@@ -257,16 +257,10 @@ class MovieRepository(private val movieDao: MovieDao) {
                 musicId = R.raw.joker
             ),
             MovieEntity(
-                imageId = R.drawable.vlastelinkolec,
-                name = "Властелин колец: Братство кольца",
-                quote = "Одно кольцо, чтобы править всеми.",
-                musicId = R.raw.vlastelinkolec
-            ),
-            MovieEntity(
-                imageId = R.drawable.patiyelement,
-                name = "Пятый элемент",
-                quote = "Любовь — это пятый элемент. Она способна спасти всё",
-                musicId = R.raw.patiyelement
+                imageId = R.drawable.maska,
+                name = "Маска",
+                quote = "Ты был крут, парень, очень крут. Но пока я здесь — ты будешь лишь вторым.",
+                musicId = R.raw.maska
             ),
             MovieEntity(
                 imageId = R.drawable.nazadvbudushee,
