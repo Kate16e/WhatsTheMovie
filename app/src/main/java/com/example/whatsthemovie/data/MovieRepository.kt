@@ -333,7 +333,7 @@ class MovieRepository(private val movieDao: MovieDao) {
                 name = "Мистер и миссис Смит",
                 quote = "Стреляешь ты так же плохо, как и готовишь.",
                 musicId = R.raw.misterimississmit
-            ),
+            )
         )
     }
 }
