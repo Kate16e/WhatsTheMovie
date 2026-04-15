@@ -1,9 +1,13 @@
 package com.example.whatsthemovie
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.whatsthemovie.Movieui.MovieViewModel
@@ -20,31 +24,25 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var musicPlayer: MusicPlayer
-
     private var currentMode: GameMode = GameMode.FRAME
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MovieViewModel
+    private var pulseAnimation: Animation? = null
+    private var isMusicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //получаем режим игры из Intent (из меню)
         currentMode = intent.getSerializableExtra("GAME_MODE") as? GameMode ?: GameMode.FRAME
-
-        //создаём музыкальный плеер
         musicPlayer = MusicPlayer(this)
-
-        //Используем ViewBinding для удобного доступа к элементам
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        pulseAnimation = AnimationUtils.loadAnimation(this, R.anim.pulse)
 
         setupViewModel()
         setupObservers()
         setupClickListeners()
         initializeDatabase()
-
-
     }
 
     private fun setupViewModel() {
@@ -55,7 +53,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeDatabase() {
-        // Запускаем инициализацию базы в фоновом потоке
         CoroutineScope(Dispatchers.IO).launch {
             val database = MovieDatabase.getDatabase(this@MainActivity)
             val repository = MovieRepository(database.movieDao())
@@ -64,7 +61,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        //наблюдаем за режимом
         viewModel.currentMode.observe(this) { mode ->
             when (mode) {
                 GameMode.FRAME -> showFrameMode()
@@ -72,33 +68,30 @@ class MainActivity : AppCompatActivity() {
                 GameMode.MUSIC -> showMusicMode()
             }
         }
-        // Наблюдаем за текущим фильмом
+
         viewModel.currentMovie.observe(this) { movie ->
-            musicPlayer.stop() //останавливаем музыку перед новым вопросом
+            stopPulse()
+            musicPlayer.stop()
+            isMusicPlaying = false
             movie?.let {
                 when (viewModel.currentMode.value) {
                     GameMode.FRAME -> {
-                        // Показываем картинку
                         Glide.with(this).load(it.imageId).centerCrop().into(binding.ivMovieFrame)
                     }
                     GameMode.QUOTE -> {
-                        // Показываем цитату
                         binding.tvQuote.text = it.quote
                     }
                     GameMode.MUSIC -> {
-                        // Показываем кнопку для музыки и сохраняем ID
                         binding.btnPlayMusic.visibility = View.VISIBLE
                         binding.btnPlayMusic.tag = it.musicId
                     }
                     null -> {
-                        //Если режим не задан, показываем картинку по умолчанию
                         Glide.with(this).load(it.imageId).centerCrop().into(binding.ivMovieFrame)
                     }
                 }
             }
         }
 
-        // Наблюдаем за перемешанными вариантами
         viewModel.shuffledOptions.observe(this) { options ->
             if (options.size == 4) {
                 binding.btnOption1.text = options[0]
@@ -108,16 +101,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Наблюдаем за состоянием ответа
         viewModel.isAnswered.observe(this) { isAnswered ->
             binding.btnNext.isEnabled = isAnswered
             if (isAnswered) {
                 highlightAnswer()
                 disableOptionButtons()
+                stopPulse()
+                isMusicPlaying = false
             }
         }
 
-        // Наблюдаем за счётом
         viewModel.score.observe(this) { score ->
             binding.tvScore.text = "Счет: $score"
         }
@@ -146,10 +139,14 @@ class MainActivity : AppCompatActivity() {
         binding.btnPlayMusic.setOnClickListener {
             val musicResId = it.tag as? Int
             musicResId?.let { resId ->
-                musicPlayer.play(resId)
+                if (!isMusicPlaying) {
+                    musicPlayer.play(resId)
+                    startPulse()
+                    isMusicPlaying = true
+                }
             }
         }
-        //кнопка выхода
+
         binding.btnClose.setOnClickListener {
             viewModel.exitGame()
         }
@@ -164,48 +161,33 @@ class MainActivity : AppCompatActivity() {
         val selectedAnswer = viewModel.selectedAnswer.value
 
         currentMovie?.let { movie ->
-            // Зелёным подсвечиваем правильный ответ
+            // Зелёным подсвечиваем правильный ответ (через backgroundTint, чтобы сохранить форму)
             when (movie.name) {
-                binding.btnOption1.text -> binding.btnOption1.setBackgroundColor(getColor(
-                    android.R.color.holo_green_dark
-                ))
-                binding.btnOption2.text -> binding.btnOption2.setBackgroundColor(getColor(
-                    android.R.color.holo_green_dark
-                ))
-                binding.btnOption3.text -> binding.btnOption3.setBackgroundColor(getColor(
-                    android.R.color.holo_green_dark
-                ))
-                binding.btnOption4.text -> binding.btnOption4.setBackgroundColor(getColor(
-                    android.R.color.holo_green_dark
-                ))
+                binding.btnOption1.text -> binding.btnOption1.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
+                binding.btnOption2.text -> binding.btnOption2.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
+                binding.btnOption3.text -> binding.btnOption3.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
+                binding.btnOption4.text -> binding.btnOption4.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
             }
 
             // Если ответ неправильный, подсвечиваем выбранный красным
             if (selectedAnswer != movie.name) {
                 when (selectedAnswer) {
-                    binding.btnOption1.text -> binding.btnOption1.setBackgroundColor(getColor(
-                        android.R.color.holo_red_dark
-                    ))
-                    binding.btnOption2.text -> binding.btnOption2.setBackgroundColor(getColor(
-                        android.R.color.holo_red_dark
-                    ))
-                    binding.btnOption3.text -> binding.btnOption3.setBackgroundColor(getColor(
-                        android.R.color.holo_red_dark
-                    ))
-                    binding.btnOption4.text -> binding.btnOption4.setBackgroundColor(getColor(
-                        android.R.color.holo_red_dark
-                    ))
+                    binding.btnOption1.text -> binding.btnOption1.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
+                    binding.btnOption2.text -> binding.btnOption2.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
+                    binding.btnOption3.text -> binding.btnOption3.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
+                    binding.btnOption4.text -> binding.btnOption4.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
                 }
             }
         }
     }
 
     private fun resetButtonColors() {
-        val defaultColor = getColor(android.R.color.darker_gray)
-        binding.btnOption1.setBackgroundColor(defaultColor)
-        binding.btnOption2.setBackgroundColor(defaultColor)
-        binding.btnOption3.setBackgroundColor(defaultColor)
-        binding.btnOption4.setBackgroundColor(defaultColor)
+        // Возвращаем светло-жёлтый цвет через backgroundTint
+        val yellowColor = ContextCompat.getColorStateList(this, android.R.color.holo_orange_light)
+        binding.btnOption1.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFACD"))
+        binding.btnOption2.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFACD"))
+        binding.btnOption3.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFACD"))
+        binding.btnOption4.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFACD"))
     }
 
     private fun enableOptionButtons() {
@@ -221,16 +203,21 @@ class MainActivity : AppCompatActivity() {
         binding.btnOption3.isEnabled = false
         binding.btnOption4.isEnabled = false
     }
+
     private fun showFrameMode() {
         binding.ivMovieFrame.visibility = View.VISIBLE
         binding.tvQuote.visibility = View.GONE
         binding.btnPlayMusic.visibility = View.GONE
+        stopPulse()
+        isMusicPlaying = false
     }
 
     private fun showQuoteMode() {
         binding.ivMovieFrame.visibility = View.GONE
         binding.tvQuote.visibility = View.VISIBLE
         binding.btnPlayMusic.visibility = View.GONE
+        stopPulse()
+        isMusicPlaying = false
     }
 
     private fun showMusicMode() {
@@ -238,9 +225,20 @@ class MainActivity : AppCompatActivity() {
         binding.tvQuote.visibility = View.GONE
         binding.btnPlayMusic.visibility = View.VISIBLE
     }
+
+    private fun startPulse() {
+        pulseAnimation?.let {
+            binding.btnPlayMusic.startAnimation(it)
+        }
+    }
+
+    private fun stopPulse() {
+        binding.btnPlayMusic.clearAnimation()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         musicPlayer.stop()
+        stopPulse()
     }
 }
-

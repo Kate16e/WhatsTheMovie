@@ -5,9 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".MainActivity">
 
+    <!-- ФОН НА ВЕСЬ ЭКРАН -->
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/fon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ -->
     <TextView
         android:id="@+id/tvScore"
         android:layout_width="wrap_content"
@@ -16,6 +28,7 @@
         android:text="Счет: 0"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,22 +41,25 @@
         android:gravity="center"
         android:padding="20dp"
         android:text="Цитата из фильма"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         android:visibility="gone"
+        android:background="#88000000"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvScore" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnPlayMusic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_marginTop="44dp"
-        android:text="▶ Слушать музыку"
+        android:src="@android:drawable/ic_media_play"
+        android:background="@drawable/circle_music_button"
+        android:scaleType="center"
         android:visibility="gone"
-        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvScore" />
@@ -60,7 +76,7 @@
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvScore"
-        app:tint="@android:color/black" />
+        app:tint="@android:color/white" />
 
     <ImageView
         android:id="@+id/ivMovieFrame"
@@ -81,8 +97,11 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginTop="420dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="8dp"
         android:text="Вариант 1"
+        android:textColor="@android:color/black"
+        android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toStartOf="@+id/btnOption2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -94,7 +113,10 @@
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="420dp"
+        android:layout_marginEnd="15dp"
         android:text="Вариант 2"
+        android:textColor="@android:color/black"
+        android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnOption1"
         app:layout_constraintTop_toTopOf="parent" />
@@ -105,8 +127,11 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginTop="28dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="8dp"
         android:text="Вариант 3"
+        android:textColor="@android:color/black"
+        android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toStartOf="@+id/btnOption4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnOption1" />
@@ -118,7 +143,10 @@
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="15dp"
         android:text="Вариант 4"
+        android:textColor="@android:color/black"
+        android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnOption3"
         app:layout_constraintTop_toBottomOf="@+id/btnOption2" />
@@ -128,8 +156,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
         android:enabled="false"
         android:text="Следующий вопрос"
+        android:textColor="@android:color/black"
+        android:background="@drawable/rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

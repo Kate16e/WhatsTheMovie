@@ -2,10 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@android:color/white">
+    tools:context=".ResultActivity">
+
+    <!-- ФОН НА ВЕСЬ ЭКРАН -->
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/fon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvBestScore"
@@ -14,7 +26,7 @@
         android:text="Лучший результат: 0"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:layout_marginTop="150dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,11 +39,12 @@
         android:text="Текущий счёт: 0"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBestScore"
         android:layout_marginTop="16dp" />
+
     <TextView
         android:id="@+id/tvTotalQuestions"
         android:layout_width="wrap_content"
@@ -39,7 +52,7 @@
         android:text="Всего вопросов: 0"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,12 +64,13 @@
         android:layout_height="wrap_content"
         android:text="В меню"
         android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/black"
+        android:background="@drawable/rounded_button_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="50dp" />
-
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

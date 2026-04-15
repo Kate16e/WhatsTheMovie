@@ -244,6 +244,102 @@ class MovieRepository(private val movieDao: MovieDao) {
                 quote = "Деньги — это самый мощный способ разрешения проблем из известных человеку, и каждый, кто попробует разубедить вас в этом, — просто мешок с дерьмом",
                 musicId = R.raw.volksoulsreet
             ),
+            MovieEntity(
+                imageId = R.drawable.barby,
+                name = "Барби",
+                quote = "Быть человеком бывает весьма неприятно.",
+                musicId = R.raw.barby
+            ),
+            MovieEntity(
+                imageId = R.drawable.joker,
+                name = "Джокер",
+                quote = "Я не был счастлив ни одной минуты за всю свою чёртову жизнь.",
+                musicId = R.raw.joker
+            ),
+            MovieEntity(
+                imageId = R.drawable.vlastelinkolec,
+                name = "Властелин колец: Братство кольца",
+                quote = "Одно кольцо, чтобы править всеми.",
+                musicId = R.raw.vlastelinkolec
+            ),
+            MovieEntity(
+                imageId = R.drawable.patiyelement,
+                name = "Пятый элемент",
+                quote = "Любовь — это пятый элемент. Она способна спасти всё",
+                musicId = R.raw.patiyelement
+            ),
+            MovieEntity(
+                imageId = R.drawable.nazadvbudushee,
+                name = "Назад в будущее",
+                quote = "Если мои вычисления верны, когда эта штука разгонится до 88 миль в час... ты увидишь кое-что по-настоящему удивительное.",
+                musicId = R.raw.nazadvbudushee
+            ),
+            MovieEntity(
+                imageId = R.drawable.ubijstvovvostochnomeksprese,
+                name = "Убийство в Восточном экспрессе",
+                quote = "Чаши весов правосудия не всегда могут быть в равновесии.",
+                musicId = R.raw.ubijstvovvostochnomeksprese
+            ),
+            MovieEntity(
+                imageId = R.drawable.sonnayaloshina,
+                name = "Сонная лощина",
+                quote = "Зло принимает множество лиц, но ничто не опаснее маски добродетели.",
+                musicId = R.raw.sonnayaloshina
+            ),
+            MovieEntity(
+                imageId = R.drawable.charlyishokoladnayafabrica,
+                name = "Чарли и шоколадная фабрика",
+                quote = "Конфеты не обязаны иметь смысл. На то они и конфеты.",
+                musicId = R.raw.charlyishokoladnayafabrica
+            ),
+            MovieEntity(
+                imageId = R.drawable.rosomaha,
+                name = "Логан",
+                quote = "Природа сделала меня уродом. Человек — оружием. А Бог — заставил всё это длиться слишком долго.",
+                musicId = R.raw.rosomaha
+            ),
+            MovieEntity(
+                imageId = R.drawable.otradsamoubijs,
+                name = "Отряд самоубийц",
+                quote = "Они стали королём и королевой Готэма. И пусть бог поможет тому, кто осмелится не уважать королеву.",
+                musicId = R.raw.otradsamoubijs
+            ),
+            MovieEntity(
+                imageId = R.drawable.f1,
+                name = "F1",
+                quote = "Мы делаем то, что делает каждый — проигрываем.",
+                musicId = R.raw.f1
+            ),
+            MovieEntity(
+                imageId = R.drawable.mechkorolaartura,
+                name = "Меч короля Артура",
+                quote = "Зачем иметь врагов, если можно иметь друзей?",
+                musicId = R.raw.mechkorolaartura
+            ),
+            MovieEntity(
+                imageId = R.drawable.akvamen,
+                name = "Аквамен",
+                quote = "У Атлантиды всегда был король. Но теперь нужен кто-то больший.",
+                musicId = R.raw.akvamen
+            ),
+            MovieEntity(
+                imageId = R.drawable.fantasticheskietvary,
+                name = "Фантастические твари и где они обитают",
+                quote = "Чемодан — это не убежище. Это дом для тех, кому негде жить.",
+                musicId = R.raw.fantasticheskietvary
+            ),
+            MovieEntity(
+                imageId = R.drawable.dyavolnositprada,
+                name = "Дьявол носит Prada",
+                quote = "Ты продала душу дьяволу, когда надела свои первые Jimmy Choo, я это увидела.",
+                musicId = R.raw.dyavolnositprada
+            ),
+            MovieEntity(
+                imageId = R.drawable.misterimississmit,
+                name = "Мистер и миссис Смит",
+                quote = "Стреляешь ты так же плохо, как и готовишь.",
+                musicId = R.raw.misterimississmit
+            ),
         )
     }
 }
