@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- ФОН НА ВЕСЬ ЭКРАН -->
     <ImageView
         android:id="@+id/ivBackground"
         android:layout_width="0dp"
@@ -19,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ -->
     <TextView
         android:id="@+id/tvScore"
         android:layout_width="wrap_content"

@@ -12,12 +12,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ResultActivity : AppCompatActivity() {
-    private lateinit var prefs: Prefs
+    private lateinit var prefs: Prefs // Объект для работы с сохранёнными данными (лучшие результаты)
     override fun onCreate(savedInstanceState: Bundle?) {
+        /**
+         * Вызывается при создании активности.
+         * Инициализирует элементы интерфейса, загружает и отображает результаты игры.
+         */
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
         prefs = Prefs(this)
-
+        // Находим элементы интерфейса по их идентификаторам
         val tvResult = findViewById<TextView>(R.id.tvResult)
         val tvBestScore = findViewById<TextView>(R.id.tvBestScore)
         val tvTotalQuestions = findViewById<TextView>(R.id.tvTotalQuestions)

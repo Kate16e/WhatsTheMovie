@@ -23,35 +23,37 @@ import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var musicPlayer: MusicPlayer
-    private var currentMode: GameMode = GameMode.FRAME
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MovieViewModel
-    private var pulseAnimation: Animation? = null
-    private var isMusicPlaying = false
+    private lateinit var musicPlayer: MusicPlayer          // Плеер для воспроизведения саундтреков
+    private var currentMode: GameMode = GameMode.FRAME     // Текущий режим игры (кадр/цитата/музыка)
+    private lateinit var binding: ActivityMainBinding      // ViewBinding для доступа к элементам интерфейса
+    private lateinit var viewModel: MovieViewModel         // ViewModel с логикой игры
+    private var pulseAnimation: Animation? = null          // Анимация пульсации для кнопки музыки
+    private var isMusicPlaying = false                     // Флаг: играет ли сейчас музыка
 
+    //Вызывается при создании активности
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Получаем режим игры из Intent (передан из MainMenuActivity)
         currentMode = intent.getSerializableExtra("GAME_MODE") as? GameMode ?: GameMode.FRAME
         musicPlayer = MusicPlayer(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        // Загружаем анимацию пульсации из ресурсов
         pulseAnimation = AnimationUtils.loadAnimation(this, R.anim.pulse)
-
+        // Настраиваем ViewModel, наблюдателей, обработчики кнопок и базу данных
         setupViewModel()
         setupObservers()
         setupClickListeners()
         initializeDatabase()
     }
-
+    //Создаёт и настраивает ViewModel
     private fun setupViewModel() {
         val database = MovieDatabase.getDatabase(this)
         val repository = MovieRepository(database.movieDao())
         val factory = MovieViewModelFactory(repository, currentMode)
         viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
     }
-
+    //Инициализирует базу данных фильмов в фоновом потоке
     private fun initializeDatabase() {
         CoroutineScope(Dispatchers.IO).launch {
             val database = MovieDatabase.getDatabase(this@MainActivity)
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             repository.initializeMovies()
         }
     }
-
+    //Настраивает наблюдатели (Observers) за изменениями данных в ViewModel
     private fun setupObservers() {
         viewModel.currentMode.observe(this) { mode ->
             when (mode) {
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                 GameMode.MUSIC -> showMusicMode()
             }
         }
+        //Наблюдатель за текущим фильмом
 
         viewModel.currentMovie.observe(this) { movie ->
             stopPulse()
@@ -76,16 +79,19 @@ class MainActivity : AppCompatActivity() {
             movie?.let {
                 when (viewModel.currentMode.value) {
                     GameMode.FRAME -> {
+                        // Загружаем изображение через Glide и помещаем в ImageView
                         Glide.with(this).load(it.imageId).centerCrop().into(binding.ivMovieFrame)
                     }
                     GameMode.QUOTE -> {
                         binding.tvQuote.text = it.quote
                     }
                     GameMode.MUSIC -> {
+                        // Показываем кнопку музыки и сохраняем ID саундтрека в tag
                         binding.btnPlayMusic.visibility = View.VISIBLE
                         binding.btnPlayMusic.tag = it.musicId
                     }
                     null -> {
+                        // Если режим не определён — показываем изображение (значение по умолчанию)
                         Glide.with(this).load(it.imageId).centerCrop().into(binding.ivMovieFrame)
                     }
                 }
@@ -100,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnOption4.text = options[3]
             }
         }
-
+        //Получает перемешанный список из 4 названий фильмов и устанавливает их на кнопки
         viewModel.isAnswered.observe(this) { isAnswered ->
             binding.btnNext.isEnabled = isAnswered
             if (isAnswered) {
@@ -111,10 +117,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Наблюдатель за счётом — обновляет отображение счёта на экране
         viewModel.score.observe(this) { score ->
             binding.tvScore.text = "Счет: $score"
         }
-
+        //Наблюдатель за переходом на экран результатов
         viewModel.navigateToResult.observe(this) { score ->
             val intent = Intent(this, ResultActivity::class.java)
             intent.putExtra("SCORE", score)
@@ -123,19 +130,19 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
+    //Настраивает обработчики нажатия на кнопки:
     private fun setupClickListeners() {
         binding.btnOption1.setOnClickListener { checkAnswer(binding.btnOption1.text.toString()) }
         binding.btnOption2.setOnClickListener { checkAnswer(binding.btnOption2.text.toString()) }
         binding.btnOption3.setOnClickListener { checkAnswer(binding.btnOption3.text.toString()) }
         binding.btnOption4.setOnClickListener { checkAnswer(binding.btnOption4.text.toString()) }
-
+        // Кнопка "Следующий вопрос" — загружает новый вопрос и восстанавливает интерфейс
         binding.btnNext.setOnClickListener {
             viewModel.nextQuestion()
             resetButtonColors()
             enableOptionButtons()
         }
-
+        // Кнопка воспроизведения музыки
         binding.btnPlayMusic.setOnClickListener {
             val musicResId = it.tag as? Int
             musicResId?.let { resId ->
@@ -146,16 +153,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        // Кнопка выхода (крестик) — досрочное завершение игры
         binding.btnClose.setOnClickListener {
             viewModel.exitGame()
         }
     }
-
+    //Передаёт выбранный вариант ответа во ViewModel для проверки
     private fun checkAnswer(selectedOption: String) {
         viewModel.checkAnswer(selectedOption)
     }
-
+    //Подсвечивает правильные и неправильные ответы после того, как пользователь сделал выбор
     private fun highlightAnswer() {
         val currentMovie = viewModel.currentMovie.value
         val selectedAnswer = viewModel.selectedAnswer.value
@@ -189,21 +196,21 @@ class MainActivity : AppCompatActivity() {
         binding.btnOption3.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFACD"))
         binding.btnOption4.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFACD"))
     }
-
+    //Разблокирует кнопки вариантов ответов (после загрузки нового вопроса)
     private fun enableOptionButtons() {
         binding.btnOption1.isEnabled = true
         binding.btnOption2.isEnabled = true
         binding.btnOption3.isEnabled = true
         binding.btnOption4.isEnabled = true
     }
-
+    //Блокирует кнопки вариантов ответов (после того, как пользователь ответил)
     private fun disableOptionButtons() {
         binding.btnOption1.isEnabled = false
         binding.btnOption2.isEnabled = false
         binding.btnOption3.isEnabled = false
         binding.btnOption4.isEnabled = false
     }
-
+    //Переключает интерфейс в режим "По кадру"
     private fun showFrameMode() {
         binding.ivMovieFrame.visibility = View.VISIBLE
         binding.tvQuote.visibility = View.GONE
@@ -211,7 +218,7 @@ class MainActivity : AppCompatActivity() {
         stopPulse()
         isMusicPlaying = false
     }
-
+    //Переключает интерфейс в режим "По цитате"
     private fun showQuoteMode() {
         binding.ivMovieFrame.visibility = View.GONE
         binding.tvQuote.visibility = View.VISIBLE
@@ -219,23 +226,24 @@ class MainActivity : AppCompatActivity() {
         stopPulse()
         isMusicPlaying = false
     }
-
+    //Переключает интерфейс в режим "По музыке"
     private fun showMusicMode() {
         binding.ivMovieFrame.visibility = View.GONE
         binding.tvQuote.visibility = View.GONE
         binding.btnPlayMusic.visibility = View.VISIBLE
     }
-
+    //Запускает анимацию пульсации на кнопке воспроизведения музыки
     private fun startPulse() {
         pulseAnimation?.let {
             binding.btnPlayMusic.startAnimation(it)
         }
     }
-
+    //Останавливает анимацию пульсации на кнопке воспроизведения музыки
     private fun stopPulse() {
         binding.btnPlayMusic.clearAnimation()
     }
 
+    //Вызывается при уничтожении активности, станавливает музыку и анимацию, чтобы освободить ресурс
     override fun onDestroy() {
         super.onDestroy()
         musicPlayer.stop()
